@@ -46,11 +46,19 @@ class Shogi(tk.Tk):
     def pressed(self, event):
         item_id = self._board.find_closest(event.x, event.y)
         tag = self._board.gettags(item_id[0])[0]
-        print(tag)
+        x, y = self._tag2pos[tag]
+        piece = self.get_piece(tag)
+        print(tag, piece.name)
 
     def z_coordinate(self, tag):
         x, y = self._numstr[::-1].index(tag[0])+1, self._kanstr.index(tag[1])+1
         return y*11 + x
+
+    def get_piece(self, tag):
+        x, y = self._tag2pos[tag]
+        i = (x - 20) // 40
+        j = (y - 20) // 40
+        return self._pieces[j][i]
     
     def init(self):
         empty = pieces.Empty()
