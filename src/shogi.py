@@ -53,7 +53,7 @@ class Shogi(tk.Tk):
         piece2 = self.get_piece("９一")
         print(tag, piece.name)
         print(piece2.is_enemy_of(piece))
-        movable_map = pieces.Piece.get_movable_map(self._pieces, i, j, pieces.Piece.FIRST_PLAYER)
+        movable_map = pieces.Piece.get_movable_map(self._pieces, i, j, pieces.Piece.SECOND_PLAYER)
         for j, row in enumerate(movable_map):
             for i, col in enumerate(row):
                 print(col)
