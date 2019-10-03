@@ -66,12 +66,15 @@ class Piece(object):
                         movable_map[y][x] = 1
                 if col == L:
                     while True:
-                        if pieces[y][x].is_empty or pieces[y][x].is_enemy_of(piece):
+                        if pieces[y][x].is_empty:
                             movable_map[y][x] = 1
                             x += (dx - 1) * direction
                             y += (2 - dy) * direction
                             if not (x >= 0 and x < 9 and y >= 0 and y < 9):
                                 break
+                        elif pieces[y][x].is_enemy_of(piece):
+                            movable_map[y][x] = 1
+                            break
                         else:
                             break
                 if col == J:
