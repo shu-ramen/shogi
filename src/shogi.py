@@ -44,15 +44,39 @@ class Shogi(tk.Tk):
             self._board.tag_bind(tag, "<ButtonPress-1>", self.pressed)
     
     def pressed(self, event):
+        for tag in self._tag2pos.keys():
+            self._board.itemconfig(tag, fill="Peach Puff3")
         item_id = self._board.find_closest(event.x, event.y)
         tag = self._board.gettags(item_id[0])[0]
-        x, y = self._tag2pos[tag]
+        i, j = self.get_index(tag)
         piece = self.get_piece(tag)
+        piece2 = self.get_piece("９一")
         print(tag, piece.name)
+        print(piece2.is_enemy_of(piece))
+        movable_map = pieces.Piece.get_movable_map(self._pieces, i, j, pieces.Piece.FIRST_PLAYER)
+        for j, row in enumerate(movable_map):
+            for i, col in enumerate(row):
+                print(col)
+                if col == 1:
+                    print(i, j)
+                    tag = self.get_tag(i, j)
+                    self._board.itemconfig(tag, fill="orange red")
+        self.update_board()
 
     def z_coordinate(self, tag):
         x, y = self._numstr[::-1].index(tag[0])+1, self._kanstr.index(tag[1])+1
         return y*11 + x
+
+    def get_index(self, tag):
+        x, y = self._tag2pos[tag]
+        i = (x - 20) // 40
+        j = (y - 20) // 40
+        return i, j
+
+    def get_tag(self, i, j):
+        z = ((j + 1) * 11) + (i + 1)
+        tag = self._z2tag[z]
+        return tag
 
     def get_piece(self, tag):
         x, y = self._tag2pos[tag]
@@ -93,6 +117,9 @@ class Shogi(tk.Tk):
             [fKyo,  fKei,   fGin,   fKin,   fGyoku, fKin,   fGin,   fKei,   fKyo ]
         ]
 
+        self.update_board()
+
+    def update_board(self):
         for i, row in enumerate(self._pieces):
             for j, piece in enumerate(row):
                 tag = self._numstr[9-(j+1)] + self._kanstr[i]
